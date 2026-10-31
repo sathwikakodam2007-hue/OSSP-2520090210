@@ -1,0 +1,98 @@
+OSSP DEBUGGING PROJECT
+======================
+
+Project Title:
+C Program Debugging Using GCC, GDB and Valgrind
+
+Objective:
+To demonstrate detection, analysis and correction of common
+programming errors using Linux debugging tools.
+
+TOOLS USED:
+1. GCC
+2. GDB
+3. Valgrind
+4. Ubuntu/Linux
+
+BUG 1: SEGMENTATION FAULT
+--------------------------
+Cause:
+A NULL pointer was dereferenced.
+
+Faulty statement:
+*ptr = 100;
+
+GDB Result:
+Program received signal SIGSEGV, Segmentation fault.
+
+GDB command:
+print ptr
+
+Result:
+$1 = (int *) 0x0
+
+Conclusion:
+The pointer contained NULL (address 0x0), causing an invalid
+memory access.
+
+Valgrind also detected:
+Invalid write of size 4
+Address 0x0 is not stack'd, malloc'd or free'd.
+
+
+BUG 2: OUT-OF-BOUNDS MEMORY ACCESS
+-----------------------------------
+Cause:
+The program allocated memory for 5 integers but attempted to
+access index 5.
+
+Memory allocation:
+malloc(5 * sizeof(int))
+
+Incorrect loop:
+for (int i = 0; i <= 5; i++)
+
+Valid indexes:
+0, 1, 2, 3, 4
+
+Invalid index:
+5
+
+Valgrind Result:
+Invalid write of size 4
+
+Valgrind identified that the address was immediately after
+the allocated 20-byte block.
+
+
+FIX:
+The loop condition was changed from:
+
+i <= 5
+
+to:
+
+i < 5
+
+
+VERIFICATION:
+After fixing the out-of-bounds access, Valgrind was used again
+to verify the program.
+
+Expected successful result:
+
+ERROR SUMMARY: 0 errors from 0 contexts
+
+and:
+
+All heap blocks were freed -- no leaks are possible.
+
+
+CONCLUSION:
+GCC was used to compile the program with debugging information.
+GDB was used to locate and analyze the segmentation fault.
+Valgrind was used to detect invalid memory accesses and verify
+the memory-bug correction.
+
+The project demonstrates a complete debugging workflow:
+Compile -> Execute -> Detect -> Analyze -> Fix -> Verify.
